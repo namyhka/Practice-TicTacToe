@@ -1,0 +1,194 @@
+import random
+import time
+players = ['X','O']
+board = [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+correctinputs = ['1','2','3','4','5','6','7','8','9']
+boardmarks = 0
+turn = ''
+stopgame = False
+
+#code below asks the players if they want to play the game.
+def startgame():
+    game = None
+    while game == None:
+        print ('Hello. Do you want to play Tic Tac Toe? Please answer Yes or No')
+        game = input().title()
+        if game == 'Yes':
+            print ("That's great. Can I get your names 1st?")
+            getname()
+        elif game == 'No':
+            print ("That's too bad. Thanks anyway!")
+        else:
+            print ('Come again?')
+            game = None
+
+#code below gets the players' names and whether they want X or O
+def getname():
+    p1name = ''
+    p2name = ''
+    print ("Hi there. what's your name?")
+    p1name = input().title()
+    time.sleep(0.5)
+    print ('Hi there ' +str (p1name) + ( ' You will be Player X'))
+    print ("What is your friend's name?")
+    p2name = input().title()
+    time.sleep(0.5)
+    print ('Hi there ' +str (p2name) + (' You will be Player O'))
+    print ("Now that we have two players, let's see who goes 1st.")
+    time.sleep(0.5)
+    gameturn()
+    
+#code below determines who goes first
+def gameturn():
+    global turn
+    turn = random.choice(players)
+    print ('Looks like player ' +str(turn) + ' goes 1st.')
+    drawboardsample()
+    
+def drawboardsample():
+    print (' | | ')
+    print ('-+-+-')
+    print (' | | ')
+    print ('-+-+-')
+    print (' | | ')
+    getinput1()
+    
+    
+#code below creates the tic tac toe board
+def drawboard(board):
+    print(board[7] + '|' + board[8] + '|' + board[9])
+    print('-+-+-')
+    print(board[4] + '|' + board[5] + '|' + board[6])
+    print('-+-+-')
+    print(board[1] + '|' + board[2] + '|' + board[3])
+    
+def playagain():
+    global stopgame
+    playagain = ''
+    print ('Do you wanna play again?')
+    while playagain == '':
+        playagain = input().title()
+        if playagain == 'Yes':
+            #board  = [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+            clearboard()
+            gameturn()
+            stopgame = False
+        elif playagain == 'No':
+            print ('Got it. Thanks for playing!')
+            stopgame = True
+        else:
+            print ('Come again?')
+            playagain = ''
+
+def getinput1():
+    global stopgame
+    global correctinputs
+    global boardmarks
+    playerinput = ''
+    while playerinput not in ['1','2','3','4','5','6','7','8','9']:
+        print ('Player ' +str(turn) +'. Where are you going to mark ,' + str(turn) +' ?')
+        playerinput = input()
+        if playerinput in correctinputs:
+            if board[int(playerinput)]!=' ':
+                print('Oops. That board is full. Please try again.')
+                playerinput = ''
+                getinput1()
+            elif playerinput not in ['1','2','3','4','5','6','7','8','9']:
+                getinput1()
+            else:
+                pass
+        else:
+            print ('Wrong entry. Please try again.')
+            getinput1()
+        board[int(playerinput)] = turn
+    drawboard(board)
+    boardmarks += 1
+    checkboardfull()
+    checkwinner()
+    time.sleep(.5)
+    if stopgame == True:
+        return
+    else:
+        getinput2()
+
+def getinput2():
+    global stopgame
+    global correctinputs
+    global boardmarks
+    playerinput = ''
+    turn2= ''
+    if players.index(turn)==0:
+        turn2=players[1]
+    else:
+        turn2=players[0]
+    while playerinput not in ['1','2','3','4','5','6','7','8','9']:
+        print ('Player ' +str(turn2) +'. Where are you going to mark ,' + str(turn2) +' ?')
+        playerinput = input()
+        if playerinput in correctinputs:
+            if board[int(playerinput)]!=' ':
+                print('Oops. That board is full. Please try again.')
+                playerinput = ''
+                getinput2()
+            elif playerinput not in ['1','2','3','4','5','6','7','8','9']:
+                getinput2()
+            else:
+                pass
+        else:
+            print ('Wrong entry. Please try again.')
+            getinput2()
+        board[int(playerinput)] = turn2
+    drawboard(board)
+    boardmarks += 1
+    checkboardfull()
+    checkwinner()
+    if stopgame == True:
+        return
+    else:    
+        getinput1()
+    
+    
+def checkboardfull():  
+    if boardmarks == 9:
+        print ('Looks like the board is full. Do you want to play again?')
+        playagain()
+    
+def checkwinner():
+    if board[7]==board[8] and board[7]==board[9] and board[7]!=' ':
+        print('Looks like player ' +board[7] + ' has won')
+        playagain()
+    elif board[4]==board[5] and board[4]==board[6] and board[4]!=' ':
+        print('Looks like player ' +board[4] + ' has won')
+        playagain()
+    elif board[1]==board[2] and board[1]==board[3] and board[1]!=' ':
+        print('Looks like player ' +board[1] + ' has won')
+        playagain()
+    elif board[7]==board[4] and board[7]==board[1] and board[7]!=' ':
+        print('Looks like player ' +board[7] + ' has won')
+        playagain()
+    elif board[8]==board[5] and board[8]==board[2] and board[8]!=' ':
+        print('Looks like player ' +board[8] + ' has won')
+        playagain()
+    elif board[9]==board[6] and board[9]==board[3] and board[9]!=' ':
+        print('Looks like player ' +board[9] + ' has won')
+        playagain()
+    elif board[7]==board[5] and board[7]==board[3] and board[7]!=' ':
+        print('Looks like player ' +board[7] + ' has won')
+        playagain()
+    elif board[1]==board[5] and board[1]==board[9] and board[1]!=' ':
+        print('Looks like player ' +board[1] + ' has won')
+        playagain()
+    else:
+        pass
+    
+def clearboard():
+    global boardmarks
+    global board
+    #del board
+    board = [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+    boardmarks = 0
+    
+def endgame():
+    if stopgame == True:
+        print ('Thanks for playing!')
+            
+startgame()
